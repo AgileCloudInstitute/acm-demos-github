@@ -1,0 +1,66 @@
+name: windows-custom
+on:
+  workflow_dispatch:
+jobs:
+  demo-windows-custom-appliance:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - id: ConfigureWindowsAgent
+        uses: ./.github/actions/windows-provisioner
+      - shell: pwsh
+        name: Download and extract Release
+        run: |
+          $vers="windows-1.1"
+          $zipName="AgileCloudManager-"+$vers+".zip"
+          echo "About to dir initially"
+          dir
+          $addressForCurl="https://download.agilecloudinstitute.io/"+$zipName
+          echo "About to curl"
+          curl -o $zipName $addressForCurl
+          echo "About to dir after curl"
+          dir
+          echo "Done with dir"
+          mkdir staging
+          Expand-Archive $zipName -DestinationPath "staging"
+          echo "About to dir staging"
+          dir staging
+          $folderName="AgileCloudManager-"+$vers
+          $sourceFolderName="staging\\*"
+          Copy-Item -Path $sourceFolderName -Recurse -Destination C:\\Users\\runneradmin\\acmhome\\ -Verbose
+          echo "About to dir C:\\Users\\runneradmin\\acmhome\\"
+          cd C:\\Users\\runneradmin\\acmhome\\
+          dir 
+
+          #Check to see if version in cli matches version in workflow input
+          $env:Path += ";C:\\Users\\runneradmin\\acmhome\\"
+          echo "About to print acm cli version command output: "
+          acm version
+
+      - shell: python
+        name: Save secrets to file
+        env:
+          ACM_SECRET: ${{ secrets.ACM_SECRET_TWO }}
+          ACM_CONFIG: ${{ secrets.ACM_CONFIG_TWO }}
+        run: |
+          import base64, subprocess, sys, os, pathlib
+          #Import config file
+          with open('C:\\Users\\runneradmin\\acm\\keys\\starter\\config.yaml', 'w') as config_file:
+            config_file.write(os.environ['ACM_CONFIG'])
+          #Import first secrets file
+          with open('C:\\Users\\runneradmin\\acm\\keys\\starter\\keys.yaml', 'w') as key_file:
+            key_file.write(os.environ['ACM_SECRET'])
+      - id: Acm_Setup_On_Windows
+        uses: ./.github/actions/acm-setup-on-windows
+        with:
+          repo_url: https://github.com/AgileCloudInstitute/acm-demo-custom-api.git
+      - id: Acm_appliance_On_Windows
+        uses: ./.github/actions/acm-appliance-on-windows
+      - id: Acm_appliance_Off_Windows
+        uses: ./.github/actions/acm-appliance-off-windows
+      - id: Acm_Setup_Off_Windows
+        uses: ./.github/actions/acm-setup-off-windows
+      - name: Delete Secrets
+        run: |
+          del C:\\Users\\runneradmin\\acm\\keys\\starter\\keys.yaml
+          #del C:\\Users\\runneradmin\\acm\\keys\\adminAccounts\\keys.yaml

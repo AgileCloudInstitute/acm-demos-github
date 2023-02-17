@@ -1,0 +1,14 @@
+name: 'acm setup off for Windows Agent'
+description: 'Runs the acm setup off command in Windows-latest agent.'
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Off
+      shell: pwsh
+      run: |
+        $env:Path += ";C:\\Users\\runneradmin\\acmhome\\"
+        cd C:\\stgng\\
+        echo ".................about to run setup off"
+        acm setup off
+        echo "About to dir"
+        dir

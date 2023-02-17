@@ -1,0 +1,49 @@
+name: 'Configure Linux Agent'
+description: 'Prepares Ubuntu-latest agents to be able to run acm commands.'
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      name: Configure agent
+      run: |
+        mkdir $HOME/acmconfig/
+        sudo mkdir /usr/acm
+        sudo mkdir /usr/acm/keys
+        sudo mkdir /usr/acm/keys/adminAccounts
+        sudo mkdir /usr/acm/keys/starter
+        sudo chown -R $USER:$USER /usr/acm
+        sudo chown -R $USER:$USER $HOME/acmconfig/
+        echo 'new------------------'
+        az extension add --name resource-graph
+        echo "Current working directory is: "
+        pwd
+        mkdir $HOME/keys
+        mkdir $HOME/keys/starter
+        sudo mkdir /var/log/acm
+        sudo chown -R $USER:$USER /var/log/acm
+        sudo mkdir /opt/acm
+        sudo chown -R $USER:$USER /opt/acm
+        git --version
+        sudo apt install -y dos2unix
+        ## Install Terraform
+        #cd $HOME
+        #mkdir terraform-download
+        #cd terraform-download
+        #wget https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip
+        #unzip terraform_0.12.24_linux_amd64.zip
+        ##Move the terraform binary into a folder that is listed as part of the PATH variable.  
+        #mv terraform /usr/local/bin/
+        echo 'and---------------------------------'
+        cd $HOME
+        #sudo apt -y install ansible
+        aws --version
+        pip3 install requests
+        pip3 install pyyaml
+        pip3 install IPy
+        python3 --version
+        python --version
+        ##Cause the ansible configuration to be owned by the agent user so that pipelines can change things like hosts file, etc.  
+        #sudo chown -R $USER:$USER /opt/pipx_bin/ansible
+        echo 'then--------------------------------'
+        sudo apt update && sudo apt upgrade
+        sudo apt clean

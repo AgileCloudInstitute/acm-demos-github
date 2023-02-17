@@ -1,0 +1,22 @@
+name: 'Artifact Retrieval and Preparation Linux Agent'
+description: 'Prepares Ubuntu-latest agents to be able to run acm commands.'
+inputs:
+  repo_url:
+    description: Custom input parameter
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      name: Extract artifact and make ready to add to PATH
+      env:
+        repo_url: ${{ inputs.repo_url }}
+      run: |
+        PATH=$PATH:/home/runner/acmhome/;export PATH
+        sudo mkdir /home/runner/testdir
+        sudo chown runner:runner /home/runner/testdir
+        cd /home/runner/testdir
+        echo 'About to setup on'
+        acm setup on sourceRepo=$repo_url
+        echo "........................About to ls -al "
+        ls -al 

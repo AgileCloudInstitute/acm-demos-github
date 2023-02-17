@@ -1,0 +1,59 @@
+name: 'Configure Windows Agent'
+description: 'Prepares Windows-latest agents to be able to run acm commands.'
+runs:
+  using: "composite"
+  steps:
+    - name: Configure agent
+      shell: pwsh
+      run: |
+          New-Item -ItemType Directory -Force -Path C:\\stgng\\
+          New-Item -ItemType Directory -Force -Path $HOME\\acmconfig\\
+          New-Item -ItemType Directory -Force -Path $HOME\\acm\\
+          New-Item -ItemType Directory -Force -Path $HOME\\acm\\keys\\
+          New-Item -ItemType Directory -Force -Path $HOME\\acm\\keys\\starter\\
+          New-Item -ItemType Directory -Force -Path $HOME\\acm\\keys\\adminAccounts\\
+          python -m pip install --upgrade pip requests
+          python -m pip install --upgrade pip PyYaml
+          python -m pip install --upgrade pip IPy
+          python -m pip install --upgrade pip pyinstaller
+          echo "About to: az --version"
+          az --version
+          echo 'About to: "az extension add --name resource-graph"'
+          az extension add --name resource-graph
+          New-Item -ItemType Directory -Force -Path $HOME\\keys\\
+          New-Item -ItemType Directory -Force -Path $HOME\\keys\\starter\\
+          New-Item -ItemType Directory -Force -Path $HOME\\acm\\logs\\
+          New-Item -ItemType Directory -Force -Path $HOME\\acmhome\\
+          New-Item -ItemType Directory -Force -Path D:\\a\\AgileCloudManager\\acmAdmin\\
+          New-Item -ItemType Directory -Force -Path D:\\a\\AgileCloudManager\\acmAdmin\\binaries\\
+          echo 'About to: git --version'
+          git --version
+          ## Install Terraform 
+          #cd $HOME\\
+          #New-Item -ItemType Directory -Force -Path $HOME\\terraform-download\\
+          #cd $HOME\\terraform-download\\
+          #curl -L https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip -o terraform_0.12.24_linux_amd64.zip -H 'Accept: application/octet-stream'
+          #Expand-Archive -Path 'terraform_0.12.24_linux_amd64.zip' -DestinationPath 'D:\\a\\AgileCloudManager\\acmAdmin\\binaries\\'
+          ##Install ansible
+          #cd $HOME
+          #python -m pip install --upgrade pip ansible
+          #Prepend python to PATH
+          $old = (Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name path).path
+          $new  =  "C:\\hostedtoolcache\\windows\\Python\\3.10.7\\x64\\Scripts\\;$old"  
+          echo "About to set item property"
+          Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name path -Value $new
+          echo "About to show permanent PATH"
+          Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name path
+          echo "About to add to temporary PATH"
+          $env:Path = "C:\\hostedtoolcache\\windows\\Python\\3.10.7\\x64\\Scripts\\;" + $env:Path
+          python -m pip install --upgrade pip requests
+          echo "About to show temporary PATH"
+          echo $env:Path
+          #echo 'About to: ansible --version'
+          #ansible --version
+          #echo 'About to: where ansible'
+          #where ansible
+          echo 'About to: aws --version'
+          aws --version
+          ##Cause the ansible configuration to be owned by the agent user so that pipelines can change things like hosts file, etc.  
+          ##sudo chown -R runner:runner /opt/pipx_bin/ansible

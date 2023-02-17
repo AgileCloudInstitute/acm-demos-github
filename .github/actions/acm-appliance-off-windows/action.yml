@@ -1,0 +1,12 @@
+name: 'acm appliance off for Windows Agent'
+description: 'Runs the acm appliance off command in Windows-latest agent.'
+runs:
+  using: "composite"
+  steps:
+    - name: Run appliance off
+      shell: pwsh
+      run: |
+        $env:Path += ";C:\\Users\\runneradmin\\acmhome\\"
+        cd C:\\stgng\\
+        echo ".................about to run e2e test"
+        acm appliance off

@@ -1,0 +1,8 @@
+# pycache directories
+**/*__pycache__*
+
+#config.yaml and keys.yaml
+config.yaml
+keys.yaml
+**/config.yaml
+**/keys.yaml

@@ -1,0 +1,20 @@
+name: 'Runs the acm setup on command using Windows Agent'
+description: 'Runs the acm setup on command using Windows Agent.'
+inputs:
+  repo_url:
+    description: Custom input parameter
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Run setup on
+      shell: pwsh
+      env:
+        repo_url: ${{ inputs.repo_url }}
+      run: |
+        $env:Path += ";C:\\Users\\runneradmin\\acmhome\\"
+        cd C:\\stgng\\
+        echo 'About to: acm setup on'
+        acm setup on sourceRepo=$env:repo_url
+        echo "About to dir"
+        dir

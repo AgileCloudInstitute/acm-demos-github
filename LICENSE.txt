@@ -1,0 +1,58 @@
+acm-demos-github (Licensed Product) and all its components are protected by 
+copyright, and are distributed under the following terms.  
+  
+acm-demos-github, developed and copyrighted by Agile Cloud Institute Incorporated 
+(Agile Cloud Institute) is intended to serve as a working example of configuration 
+for Agile Cloud Institute's Agile Cloud Manager app, capable of creating, updating, 
+and deleting cloud resources.  
+  
+This software and associated documentation files (the "Software") may only be
+used if you (and any entity that you represent) have agreed to,
+and are in compliance with, the Agile Cloud Institute Terms Of Service Terms available
+at https://AgileCloudInstitute.io/terms (the “Terms”), or other agreements governing
+the use of the Software, as mutually agreed by you and Agile Cloud Institute, Inc ("Agile 
+Cloud Institute"), and otherwise are in full compliance with this license.  
+  
+Since acm-demos-github is open source and free of licensing fees, you are free to use, 
+modify, and distribute the source code, as long as you include this copyright statement, 
+as long as you are in compliance with the Terms, and as long as you do not use it to create a 
+product that competes with any of Agile Cloud Institute's current or future offerings.  
+  
+In particular, you can use acm-demos-github to 
+build proprietary software and are under no obligation to redistribute any of your 
+source code that is built using acm-demos-github.  Note however, that you 
+may not do anything to the acm-demos-github code, such as copyrighting it 
+yourself or claiming authorship of acm-demos-github, that will prevent 
+acm-demos-github from being distributed freely using an open source 
+development model.  
+  
+Warranty  
+  
+LICENSED PRODUCT IS PROVIDED AS IS WITH NO WARRANTIES OF ANY KIND
+INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE, NON-INFRINGEMENT, OR ARISING FROM A COURSE OF
+DEALING, USAGE OR TRADE PRACTICE.  
+  
+Support  
+  
+LICENSED PRODUCT IS PROVIDED WITH NO SUPPORT AND WITHOUT ANY
+OBLIGATION ON THE PART OF AGILE CLOUD INSTITUTE OR ANY OF ITS SUBSIDIARIES 
+OR AFFILIATES TO ASSIST IN ITS USE, CORRECTION, MODIFICATION OR ENHANCEMENT.  
+  
+Support may be available from Agile Cloud Institute to users who have agreed to a
+support contract.  
+  
+Liability  
+  
+AGILE CLOUD INSTITUTE OR ANY OF ITS SUBSIDIARIES OR AFFILIATES SHALL HAVE NO LIABILITY
+WITH RESPECT TO THE INFRINGEMENT OF COPYRIGHTS, TRADE SECRETS OR ANY
+PATENTS BY LICENSED PRODUCT OR ANY PART THEREOF.  
+  
+IN NO EVENT WILL AGILE CLOUD INSTITUTE OR ANY OF ITS SUBSIDIARIES OR AFFILIATES BE
+LIABLE FOR ANY LOST REVENUE OR PROFITS OR OTHER SPECIAL, INDIRECT AND
+CONSEQUENTIAL DAMAGES, EVEN IF AGILE CLOUD INSTITUTE HAS BEEN ADVISED OF THE 
+POSSIBILITY OF SUCH DAMAGES.  
+  
+acm-demos-github copyright Agile Cloud Institute. Placerville CA USA, 2023.  
+https://AgileCloudInstitute.io  
+  

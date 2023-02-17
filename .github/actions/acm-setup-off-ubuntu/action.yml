@@ -1,0 +1,14 @@
+name: 'acm setup off for Linux Agent'
+description: 'Runs the acm setup off command in Ubuntu-latest agent.'
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Off
+      shell: bash
+      run: |
+        PATH=$PATH:/home/runner/acmhome/;export PATH
+        cd /home/runner/testdir
+        echo '........................About to setup off'
+        acm setup off
+        echo "........................About to ls -al"
+        ls -al

@@ -1,0 +1,12 @@
+name: 'acm appliance on for Linux Agent'
+description: 'Runs the acm appliance on command in Ubuntu-latest agent.'
+runs:
+  using: "composite"
+  steps:
+      - shell: bash
+        name: Run appliance on
+        run: |
+          PATH=$PATH:/home/runner/acmhome/;export PATH
+          cd /home/runner/testdir
+          echo ".................about to run e2e test"
+          acm appliance on
