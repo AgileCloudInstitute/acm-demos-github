@@ -45,7 +45,7 @@ runs:
         ##Cause the ansible configuration to be owned by the agent user so that pipelines can change things like hosts file, etc.  
         #sudo chown -R $USER:$USER /opt/pipx_bin/ansible
         echo 'then--------------------------------'
-        sudo apt-get install -y grub-pc 'grub-efi*-'
+        
         echo 'also--------------------------------'
         sudo apt-get update && sudo apt-get upgrade
-        sudo apt-get clean
+        #sudo apt-get clean
