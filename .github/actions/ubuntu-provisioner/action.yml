@@ -24,7 +24,7 @@ runs:
         sudo mkdir /opt/acm
         sudo chown -R $USER:$USER /opt/acm
         git --version
-        sudo apt install -y dos2unix
+        sudo apt-get install -y dos2unix
         ## Install Terraform
         #cd $HOME
         #mkdir terraform-download
@@ -35,7 +35,7 @@ runs:
         #mv terraform /usr/local/bin/
         echo 'and---------------------------------'
         cd $HOME
-        #sudo apt -y install ansible
+        #sudo apt-get -y install ansible
         aws --version
         pip3 install requests
         pip3 install pyyaml
@@ -45,5 +45,5 @@ runs:
         ##Cause the ansible configuration to be owned by the agent user so that pipelines can change things like hosts file, etc.  
         #sudo chown -R $USER:$USER /opt/pipx_bin/ansible
         echo 'then--------------------------------'
-        sudo apt update && sudo apt upgrade
-        sudo apt clean
+        sudo apt-get update && sudo apt-get upgrade
+        sudo apt-get clean
