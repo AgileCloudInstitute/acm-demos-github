@@ -6,19 +6,19 @@
 ### Instructions
 ###############################################################################################################
 
-#1. Log in to portal.azure.com as an account owner. (Later, you can lower the permission level, but for this demo, being account owner will eliminate possible permissions errors so the demos can be run quickly.)
-#2. Open a cloud shell by clicking the cloud shell icon at the top of the screen.
-#3. Select bash as the shell for simplicity.
-#4. Type "az --version" in the cloudshell terminal. This was tested in version 2.48, with Python 3.9.  If you later encounter problems, please note the versions and contact us to help you.
+# 1. Log in to portal.azure.com as an account owner. (Later, you can lower the permission level, but for this demo, being account owner will eliminate possible permissions errors so the demos can be run quickly.)
+# 2. Open a cloud shell by clicking the cloud shell icon at the top of the screen.
+# 3. Select bash as the shell for simplicity.
+# 4. Type "az --version" in the cloudshell terminal. This was tested in version 2.48, with Python 3.9.  If you later encounter problems, please note the versions and contact us to help you.
 # 5. Download this script and a dependent arm template into your cloudshell by typing the following into the terminal:
 #    wget https://github.com/AgileCloudInstitute/acm-demos-github/blob/main/acmDemoSetup.py?raw=true -O acmDemoSetup.py
 #    wget https://github.com/AgileCloudInstitute/acm-demos-github/blob/main/subscriptionScopeRole.json?raw=true -O subscriptionScopeRole.json
 # 6. Confirm that the file has been successfully downloaded by typing "ls -al" and looking for the file name in the results.
-#7. Type the following command to automatically create a keys.yaml and config.yaml populated with valid azure credentials that will be needed for the demo.
+# 7. Type the following command to automatically create a keys.yaml and config.yaml populated with valid azure credentials that will be needed for the demo.
 #    python acmDemoSetup.py create azurefiles subscriptionId=valid-subscription-id-guid subscriptionName=validSubscriptionName tenantId=valid-active-directory-tenant-if appRegistrationName=myappregtest1 clientSecretName=mycert2 clientSecretEndDate=2024-12-31
-#8. Confirm the command completed without errors.
-#9. Retrieve the config by typing `cat config.yaml` and copying the contents into a config.yaml file in your local computer to keep in a safe place.
-#10. Retrieve the keys by typing `cat keys.yaml` and copying the contents into a keys.yaml file in your local computer to keep in a safe place.
+# 8. Confirm the command completed without errors.
+# 9. Retrieve the config by typing `cat config.yaml` and copying the contents into a config.yaml file in your local computer to keep in a safe place.
+# 10. Retrieve the keys by typing `cat keys.yaml` and copying the contents into a keys.yaml file in your local computer to keep in a safe place.
 
 # 1. Log in to the AWS GUI console as root, or as a high enough user to create PowerUsers and perform other high-authority actions.
 # 2. Set the region to us-west-2 for the demo. (Later, after you successfully complete the demo, you can expiriment with other regions)
@@ -32,9 +32,9 @@
 
 #    Note that the values for userName, groupName, and keyPairName can be any valid values. But start with these because they work, assuming you do not already have resources with the same names created in your account.
 
-# 10. Examine the cloudshell terminal output to confirm there were no errors reported, and that the keys were printed to the terminal.
+# 8. Examine the cloudshell terminal output to confirm there were no errors reported, and that the keys were printed to the terminal.
 
-# 12. Copy the following three lines of yaml after "THE THREE LINES TO ADD TO keys.yaml FOR AWS ARE:" at the end of the terminal output and paste them into the keys.yaml that was created when you ran the Azure command and saved the resulting keys.yaml to your local computer.
+# 9. Copy the following three lines of yaml after "THE THREE LINES TO ADD TO keys.yaml FOR AWS ARE:" at the end of the terminal output and paste them into the keys.yaml that was created when you ran the Azure command and saved the resulting keys.yaml to your local computer.
 
 #     KeyName: actual-value-redacted
 #     AWSAccessKeyId: actual-value-redacted
@@ -43,15 +43,14 @@
 #     Note that the 3 preceding lines will have actual secrets that you will need to copy into keys.yaml
 #     Also note that you will be replacing the empty/default lines that were written for keyName, AWSAccessKeyId, and AWSSecretKey when you ran configFilesGenerator.py
 
-# 13. Save a backup copy of the keys.yaml someplace safe, so you have access to it to delete the resources later.
+# 10. Save a backup copy of the keys.yaml someplace safe, so you have access to it to delete the resources later.
 
 
-# LATER, WHEN YOU HAVE SUCCESSFULLY RUN THE DEMOS, YOU CAN DELETE THE RESOURCES CREATED BY THIS PROGRAM AND REPLACE THEM WITH NEW RESOURCES FOR SECURITY REASONS.
+# LATER, AFTER YOU HAVE SUCCESSFULLY RUN THE DEMOS, YOU CAN DELETE THE RESOURCES CREATED BY THIS PROGRAM AND REPLACE THEM WITH NEW RESOURCES FOR SECURITY REASONS.
 # THE DESTROY COMMANDS CORRESPONDING WITH THE COMMANDS WE GAVE ABOVE ARE:  
 
 # python3 acmDemoSetup.py destroy userName=ACMUser_xyz groupName=SuperUserACM_xyz keyPairName=ACMKeyPair_xyz accessKeyID=ValidAccessKeyIdThatWasCreatedByCreateCommand
 # python3 acmDemoSetup.py destroy azure clientId=valid-client-id-created-fordemo
-
 
 # Note the values you give for ValidAccessKeyIdThatWasCreatedByCreateCommand and valid-client-id-created-fordemo will be the values that you saved in the backedup copy of the keys.yaml file you created when following the above instructions. 
 
