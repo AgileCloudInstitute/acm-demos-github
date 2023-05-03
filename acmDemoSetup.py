@@ -6,6 +6,12 @@
 ### Instructions
 ###############################################################################################################
 
+# THIS SCRIPT IS UNDER DEVELOPMENT. IT HAS A KNOWN BUG OF FAILING TO ASSIGN THE AZURE SUBSCRIPTION OWNER ROLE TO THE 
+# CLIENT ID CREATED BY THIS AUTOMATION. THE WORKAROUND SEEMS TO BE TO USE THE AZURE PORTAL TO MANUALLY ASSIGN THE
+# SUBSCRIPTION OWNER ROLE. 
+# WHEN WE ARE DONE DEVELOPMENT OF THIS SCRIPT, WE WILL UPDATE THE DEMO INSTRUCTIONS AT THE AGILECLOUDINSTITUTE.IO 
+# WEB SITE. UNTIL THEN, CONSIDER THIS TO BE EXPERIEMENTAL AND NOT THE OFFICIAL WAY TO SET UP THE DEMO.
+
 #1. Log in to portal.azure.com as an account owner. (Later, you can lower the permission level, but for this demo, being account owner will eliminate possible permissions errors so the demos can be run quickly.)
 #2. Open a cloud shell by clicking the cloud shell icon at the top of the screen.
 #3. Select bash as the shell for simplicity.
