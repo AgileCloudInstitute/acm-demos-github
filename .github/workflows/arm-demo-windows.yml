@@ -38,7 +38,7 @@ jobs:
         name: Save secrets to file
         env:
           ACM_SECRET: ${{ secrets.ACM_SECRET_ONE }}
-          ACM_CONFIG: ${{ secrets.ACM_CONFIG_TWO }}
+          ACM_CONFIG: ${{ secrets.ACM_CONFIG_ONE }}
         run: |
           import base64, subprocess, sys, os, pathlib
           #Import config file
