@@ -1,61 +1,6 @@
 # coding: utf-8
 
-## Copyright 2023 Agile Cloud Institute (AgileCloudInstitute.io) as described in LICENSE.txt distributed with this repository: https://github.com/AgileCloudInstitute/acm-demos-github
-
-###############################################################################################################
-### Instructions
-###############################################################################################################
-
-#1. Log in to portal.azure.com as an account owner. (Later, you can lower the permission level, but for this demo, being account owner will eliminate possible permissions errors so the demos can be run quickly.)
-#2. Open a cloud shell by clicking the cloud shell icon at the top of the screen.
-#3. Select bash as the shell for simplicity.
-#4. Type "az --version" in the cloudshell terminal. This was tested in version 2.48, with Python 3.9.  If you later encounter problems, please note the versions and contact us to help you.
-# 5. Download this script and a dependent arm template into your cloudshell by typing the following into the terminal:
-#    wget https://github.com/AgileCloudInstitute/acm-demos-github/blob/main/acmDemoSetup.py?raw=true -O acmDemoSetup.py
-#    wget https://github.com/AgileCloudInstitute/acm-demos-github/blob/main/subscriptionScopeRole.json?raw=true -O subscriptionScopeRole.json
-# 6. Confirm that the file has been successfully downloaded by typing "ls -al" and looking for the file name in the results.
-#7. Type the following command to automatically create a keys.yaml and config.yaml populated with valid azure credentials that will be needed for the demo.
-#    python acmDemoSetup.py create azurefiles subscriptionId=valid-subscription-id-guid subscriptionName=validSubscriptionName tenantId=valid-active-directory-tenant-if appRegistrationName=myappregtest1 clientSecretName=mycert2 clientSecretEndDate=2024-12-31
-#8. Confirm the command completed without errors.
-#9. Retrieve the config by typing `cat config.yaml` and copying the contents into a config.yaml file in your local computer to keep in a safe place.
-#10. Retrieve the keys by typing `cat keys.yaml` and copying the contents into a keys.yaml file in your local computer to keep in a safe place.
-
-# 1. Log in to the AWS GUI console as root, or as a high enough user to create PowerUsers and perform other high-authority actions.
-# 2. Set the region to us-west-2 for the demo. (Later, after you successfully complete the demo, you can expiriment with other regions)
-# 3. Search for "CloudShell" in the AWS services, and navigate to open a cloudshell terminal
-# 4. Type "aws --version" in the cloudshell terminal.  This is tested in version 2.11. If you later encounter problems, note the version. and please report back to us.
-# 5. Download this script into your cloudshell by typing the following into the terminal:
-#    wget https://github.com/AgileCloudInstitute/acm-demos-github/blob/main/acmDemoSetup.py?raw=true -O acmDemoSetup.py
-# 6. Confirm that the file has been successfully downloaded by typing "ls -al" and looking for the file name in the results.
-# 7. Run the following command to create IAM resources including keys:
-#    python3 acmDemoSetup.py create aws userName=ACMUser_xyz groupName=SuperUserACM_xyz keyPairName=ACMKeyPair_xyz
-
-#    Note that the values for userName, groupName, and keyPairName can be any valid values. But start with these because they work, assuming you do not already have resources with the same names created in your account.
-
-# 10. Examine the cloudshell terminal output to confirm there were no errors reported, and that the keys were printed to the terminal.
-
-# 12. Copy the following three lines of yaml after "THE THREE LINES TO ADD TO keys.yaml FOR AWS ARE:" at the end of the terminal output and paste them into the keys.yaml that was created when you ran the Azure command and saved the resulting keys.yaml to your local computer.
-
-#     KeyName: actual-value-redacted
-#     AWSAccessKeyId: actual-value-redacted
-#     AWSSecretKey: actual-value-redacted
-
-#     Note that the 3 preceding lines will have actual secrets that you will need to copy into keys.yaml
-#     Also note that you will be replacing the empty/default lines that were written for keyName, AWSAccessKeyId, and AWSSecretKey when you ran configFilesGenerator.py
-
-# 13. Save a backup copy of the keys.yaml someplace safe, so you have access to it to delete the resources later.
-
-
-# LATER, WHEN YOU HAVE SUCCESSFULLY RUN THE DEMOS, YOU CAN DELETE THE RESOURCES CREATED BY THIS PROGRAM AND REPLACE THEM WITH NEW RESOURCES FOR SECURITY REASONS.
-# THE DESTROY COMMANDS CORRESPONDING WITH THE COMMANDS WE GAVE ABOVE ARE:  
-
-# The destroy commands must be run with the same sufficient privileges that you used to create these IAM resources, because the IAM resources created by these demos cannot destroy themselves.
-
-# python3 acmDemoSetup.py destroy aws userName=ACMUser_xyz groupName=SuperUserACM_xyz keyPairName=ACMKeyPair_xyz accessKeyID=ValidAccessKeyIdThatWasCreatedByCreateCommand
-# python acmDemoSetup.py destroy azure clientId=valid-client-id-created-fordemo
-
-
-# Note the values you give for ValidAccessKeyIdThatWasCreatedByCreateCommand and valid-client-id-created-fordemo will be the values that you saved in the backedup copy of the keys.yaml file you created when following the above instructions. 
+## Copyright 2023 Agile Cloud Institute (AgileCloudInstitute.io) .  Rights restricted as described in LICENSE.txt distributed with this repository: https://github.com/AgileCloudInstitute/acm-demos-github
 
 import sys
 import subprocess
@@ -64,6 +9,7 @@ import json
 import random
 import string
 import yaml
+import os
 
 ErrorCount = 0
  
@@ -79,8 +25,16 @@ def main(inputArgs):
     quit("")
   if len(inputArgs) == 1:
     malformedMessage()  
+  elif len(inputArgs) == 2:
+    if (inputArgs[1]=="validate-config-and-keys"):
+      validateKeysYaml(inputArgs[1])
+      validateConfigYaml(inputArgs[1])
+    else:
+      malformedMessage()
   else:
     print("Beginning to run command.")
+    if (inputArgs[1] != "create") and (inputArgs[1] != "destroy"):
+      malformedMessage()
     if (inputArgs[2]=="aws") or (inputArgs[2]=="awsfiles"):
       if inputArgs[3].count("=") == 1:
         key=inputArgs[3].split("=")[0]
@@ -136,68 +90,68 @@ def main(inputArgs):
           key=inputArgs[3].split("=")[0]
           value=inputArgs[3].split("=")[1]
           if key != "subscriptionId":
-            malformedAzureMessage()
+            malformedMessage()
           else:
             validateAzureInput(key, value)
             subscriptionId=value
         else:
-          malformedAzureMessage()
+          malformedMessage()
         if inputArgs[4].count("=") == 1: 
           inputArgs[4].count("=")
           key=inputArgs[4].split("=")[0]
           value=inputArgs[4].split("=")[1]
           if key != "subscriptionName":
-            malformedAzureMessage()
+            malformedMessage()
           else:
             validateAzureInput(key, value)
             subscriptionName=value
         else:
-          malformedAzureMessage()
+          malformedMessage()
         if inputArgs[5].count("=") == 1:
           inputArgs[5].count("=")
           key=inputArgs[5].split("=")[0]
           value=inputArgs[5].split("=")[1]
           if key != "tenantId":
-            malformedAzureMessage()
+            malformedMessage()
           else:
             validateAzureInput(key, value)
             tenantId=value
         else:
-          malformedAzureMessage()
+          malformedMessage()
         if inputArgs[6].count("=") == 1:
           inputArgs[6].count("=")
           key=inputArgs[6].split("=")[0]
           value=inputArgs[6].split("=")[1]
           if key != "appRegistrationName":
-            malformedAzureMessage()
+            malformedMessage()
           else:
             validateAzureInput(key, value)
             appRegistrationName=value
         else:
-          malformedAzureMessage()
+          malformedMessage()
 
         if inputArgs[7].count("=") == 1:
           inputArgs[7].count("=")
           key=inputArgs[7].split("=")[0]
           value=inputArgs[7].split("=")[1]
           if key != "clientSecretName":
-            malformedAzureMessage()
+            malformedMessage()
           else:
             validateAzureInput(key, value)
             clientSecretName=value
         else:
-          malformedAzureMessage()
+          malformedMessage()
         if inputArgs[8].count("=") == 1:
           inputArgs[8].count("=")
           key=inputArgs[8].split("=")[0]
           value=inputArgs[8].split("=")[1]
           if key != "clientSecretEndDate":
-            malformedAzureMessage()
+            malformedMessage()
           else:
             validateAzureInput(key, value)
             clientSecretEndDate=value
         else:
-          malformedAzureMessage()
+          malformedMessage()
         firstResults = createAzureSequence(subscriptionId, subscriptionName, tenantId, appRegistrationName, clientSecretName, clientSecretEndDate, inputArgs[2])
         print("")
         print("----------------------------------------------------------------------")
@@ -222,19 +176,17 @@ def main(inputArgs):
           key=inputArgs[3].split("=")[0]
           value=inputArgs[3].split("=")[1]
           if key != "clientId":
-            malformedAzureMessage()
+            malformedMessage()
           else:
             validateAzureInput(key, value)
           appRegistrationId=value
         else:
-          malformedAzureMessage()
+          malformedMessage()
         print("About to start delete Azure credentials sequence. ")
         deleteAzureSequence(appRegistrationId)
-
-#//end x
-    elif (inputArgs[2]=="filesonly"):
-      print("Add File only logic here.  ")
-
+    else:
+      malformedMessage()
+      quit()
 
 #############################################################################################
 ##### CREATE SEQUENCE
@@ -312,9 +264,22 @@ def deleteSequence(userName, groupName, keyPairName, AWSAccessKeyId):
   print("Completed delete process.")
 
 def malformedMessage():
-  print("You must add arguments to run this script. Examples include: ")
-  print("python3 acmDemoSetup.py create userName=validUserName groupName=validGroupName keyPairName=validKeyPairname")
-  print("python3 acmDemoSetup.py destroy userName=validUserName groupName=validGroupName keyPairName=validKeyPairname AWSAccessKeyId=ValidAWSAccessKeyIdThatWasCreatedByCreateCommand")
+  print("")
+  print("You entered an invalid CLI command.  The CLI commands that we test with have the following syntax: ")
+  print("")
+  print("python acmDemoSetup.py create azurefiles subscriptionId=valid-subscription-id-guid subscriptionName=validSubscriptionName tenantId=valid-active-directory-tenant-id appRegistrationName=ValidAppRegistrationName clientSecretName=ValidClientSecretName clientSecretEndDate=2024-12-31")
+  print("")
+  print("python3 acmDemoSetup.py create aws userName=validUserName groupName=validGroupName keyPairName=validKeyPairname")
+  print("")
+  print("python acmDemoSetup.py destroy azure clientId=valid-client-id-created-fordemo")
+  print("")
+  print("python3 acmDemoSetup.py destroy aws userName=validUserName groupName=validGroupName keyPairName=validKeyPairname AWSAccessKeyId=ValidAWSAccessKeyIdThatWasCreatedByCreateCommand")
+  print("")
+  print("python acmDemoSetup.py validate-config-and-keys")
+  print("")
+  print("Please examine the command that you entered to see how it deviates from these examples.  ")
+  print("")
+  print("Also please note that Python 3 is required.  Type 'python --version' and 'python3 --version' in your terminal to determine whether you must begin each of the above commands with either 'python3' or 'python' .  The reason we use 'python3' in some of the examples is that the AWS Cloud Shell requires 'python3' to be stated explicitly to avoid invocation of Python 2, while the Azure Cloud Shell maps the 'python' command to Python 3. ")
   quit()
 
 def validateInput(key, value):
@@ -679,22 +644,14 @@ def confirmSubscriptionRole(clientId,roleName,counter=1):
         return False
         #sys.exit(1)
 
-
-
-def malformedAzureMessage():
-  print("You must add arguments to run this script. Examples include: ")
-  print("python demoSetup.py create azurefiles subscriptionId=ValidSubscriptionId subscriptionName=ValidSubscriptionName tenantId=ValidTenantId appRegistrationName=ValidAppRegistrationName clientSecretName=ValidClientSecretName clientSecretEndDate=YYYY-MM-DD")
-  print("python demoSetup.py destroy azure clientId=ValidClientIdThatWasCreatedByCreateCommand")
-  quit()
-
 def validateAzureInput(key, value):
   if len(value) > 40:
     print("The value ", value, " for ",key," is longer than 40 characters.")
-    malformedAzureMessage()
+    malformedMessage()
   elif (key == "subscriptionId") or (key == "tenantId") or (key == "appRegistrationId"):
     if value.count("-")!=4:
       print("The value for ",key," must contain 5 blocks separated by dashes - .")
-      malformedAzureMessage()
+      malformedMessage()
     if value.count("-")==4:
       if len(value.split("-")[0]) != 8:
         print("The first block of characters in ",key," must be 8 characters long.")
@@ -708,11 +665,11 @@ def validateAzureInput(key, value):
         print("The fifth block of characters in ",key," must be 12 characters long.")
     if len(value) != 36:
       print("The value for ",key," must be 36 characters.")
-      malformedAzureMessage()
+      malformedMessage()
   elif (key == "clientSecretEndDate"):
     if value.count("-") != 2:
       print("The value for clientSecertEndDate must contain three blocks of numbers separated by dashes - ")
-      malformedAzureMessage()
+      malformedMessage()
       if len(value.split("-")[0]) != 4:
         print("The first block of characters in ",key," must be 4 numeric characters long.")
       if len(value.split("-")[1]) != 2:
@@ -924,15 +881,16 @@ def validateEachConfigField(key, value, operation):
   global ErrorCount
   valueFoundOrMissing = "Found"
   if value == None:
-    print("ERROR: No value is given for the key ", key)
-    ErrorCount += 1
+    #print("ERROR: No value is given for the key ", key)
+    #ErrorCount += 1
+    pass
   else:
     if key == "subscriptionName":
-      if operation == "awsfiles":
+      if (operation == "awsfiles") or (operation == "validate-config-and-keys"):
         if "Follow-instructions-in-article" in value:
           valueFoundOrMissing = "Missing"
     if key == "subscriptionId":
-      if operation == "awsfiles":
+      if (operation == "awsfiles"):
         if "Follow-instructions-in-article" in value:
           valueFoundOrMissing = "Missing"
       else:
@@ -958,7 +916,7 @@ def validateEachConfigField(key, value, operation):
           print("ERROR: The number of characters after the fourth dash in the subscriptionId value must be exactly 12. ")
           ErrorCount += 1
     elif key == "tenantId":
-      if operation == "awsfiles":
+      if (operation == "awsfiles"):
         if "Follow-instructions-in-article" in value:
           valueFoundOrMissing = "Missing"
       else:
@@ -1015,6 +973,8 @@ def validateEachConfigField(key, value, operation):
 
 def validateEachKeysField(key, value):
   global ErrorCount
+  if value == None:
+    quit("Empty")
   if key == "secretsType":
     if value != "master":
       print("ERROR: The value you gave for the secretsType key is not valid. The only valid value for the start of the demo is 'master', without the single quotes. ")
@@ -1055,9 +1015,11 @@ def validateEachKeysField(key, value):
       ErrorCount += 1
 
 def validateConfigYaml(operation):
-  print(" ")
-  print("operation is: ", operation)
-  print(" ")
+  if not os.path.isfile("config.yaml"):
+    quit("ERROR: config.yaml does not exist in the current directory.  Halting the program so you can identify the source of the problem. ")
+  #print(" ")
+  #print("operation is: ", operation)
+  #print(" ")
   global ErrorCount
   fileName = "config.yaml"
   missingFields = []
@@ -1070,6 +1032,7 @@ def validateConfigYaml(operation):
         #Check for empty field
         if fileContents[thisKey] == None:
           print("ERROR: No value is given for the key ", thisKey)
+          missingValues.append(thisKey)
           ErrorCount += 1
         elif (operation=="awsfiles") and ((thisKey=="subscriptionId") or (thisKey=="subscriptionName") or (thisKey=="tenantId")) and ("Follow-instructions" in fileContents[thisKey]):
           #skipping because this case is handled elsewhere in the logic.
@@ -1106,16 +1069,30 @@ def validateConfigYaml(operation):
           print(" ")
           print("The following config.yaml fields are missing values.  The Azure demos will not work unless you put valid values for the following fields into your config.yaml: ")
           for missingVal in missingValues:
-            print(missingVal,":")
+            printStr = str(str(missingVal).replace(" ","")+":").replace(" ","")
+            print(printStr)
           print(" ")
+        if operation == "validate-config-and-keys":
+          print(" ")
+          print("The following config.yaml fields are missing values.  The demos will not work unless you put valid values for the following fields into your config.yaml: ")
+          for missingVal in missingValues:
+            printStr = str(str(missingVal).replace(" ","")+":").replace(" ","")
+            print(printStr)
+          print(" ")
+
       else:
         print("All of the fields in config.yaml have values.")
     except yaml.YAMLError as exc:
       print("ERROR: ", fileName, " does not contain valid yaml. ")
       ErrorCount += 1
       print(exc)
+  print("ErrorCount is: ", str(ErrorCount))
 
 def validateKeysYaml(operation):
+  if not os.path.isfile("keys.yaml"):
+    quit("ERROR: keys.yaml does not exist in the current directory.  Halting the program so you can identify the source of the problem. ")
+#  if operation == "validate-config-and-keys":
+#    print("Inside validateKeysYaml()")
   global ErrorCount
   fileName = "keys.yaml"
   missingFields = []
@@ -1134,21 +1111,28 @@ def validateKeysYaml(operation):
           keysStatusDict[thisKey] = "Found"
         else:
           #Validate the value of the field
-          #Check for too many spaces
-          if fileContents[thisKey].count(' ') != 0:
-            print("ERROR: The value given for the key ", thisKey, " contains spaces, which is illegal. Remove the spaces and re-run the validation script. ")
+          if fileContents[thisKey] == None:
+            print("ERROR: No value was present for the key ", thisKey)
+            missingValues.append(thisKey)
+            keysStatusDict[thisKey] = "Found"
             ErrorCount += 1
-          #Check for empty value.
-          if len(fileContents[thisKey]) == 0:
-            print("ERROR: The value for field named ", thisKey, " has a length of 0. Please confirm that this field has been properly formatted, and then run this validation script again. ")
-            ErrorCount += 1
-          #Check for excessive length in value
-          if len(fileContents[thisKey]) > 40:
-            print("ERROR: The value for field named ", thisKey, " has a length greater than 40. The sample data values in the demo all have fewer than 40 characters, which means that you have too many characters for the value in this line. Please check the line in your yaml file, and then run this validation script again. ")
-            ErrorCount += 1
-          validateEachKeysField(thisKey, fileContents[thisKey])
-          #Mark the item as present
-          keysStatusDict[thisKey] = "Found"
+          else:
+            #Check for too many spaces
+            if fileContents[thisKey].count(' ') != 0:
+              print("ERROR: The value given for the key ", thisKey, " contains spaces, which is illegal. Remove the spaces and re-run the validation script. ")
+              ErrorCount += 1
+            #Check for empty value.
+            if len(fileContents[thisKey]) == 0:
+              print("ERROR: The value for field named ", thisKey, " has a length of 0. Please confirm that this field has been properly formatted, and then run this validation script again. ")
+              ErrorCount += 1
+            #Check for excessive length in value
+            if len(fileContents[thisKey]) > 40:
+              print("ERROR: The value for field named ", thisKey, " has a length greater than 40. The sample data values in the demo all have fewer than 40 characters, which means that you have too many characters for the value in this line. Please check the line in your yaml file, and then run this validation script again. ")
+              ErrorCount += 1
+            validateEachKeysField(thisKey, fileContents[thisKey])
+            #Mark the item as present
+            keysStatusDict[thisKey] = "Found"
+#
       for configItem in keysStatusDict:
         if keysStatusDict[configItem] == "Missing":
           print("ERROR: Field named ", configItem, " in keys.yaml has a missing value. ")
