@@ -11,7 +11,7 @@ jobs:
       - shell: bash
         name: Download and extract Release
         run: |
-          nameOfTar="AgileCloudManager-linux-1.1.tar.gz"
+          nameOfTar="AgileCloudManager-linux-1.2.tar.gz"
           echo "About to print nameOfTar"
           echo $nameOfTar
           #Start of wget version
