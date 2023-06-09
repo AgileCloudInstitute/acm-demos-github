@@ -11,7 +11,7 @@ jobs:
       - shell: pwsh
         name: Download and extract Release
         run: |
-          $zipName="AgileCloudManager-windows-1.1.zip"
+          $zipName="AgileCloudManager-windows-1.2.zip"
           echo "About to dir initially"
           dir
           $addressForCurl="https://download.agilecloudinstitute.io/"+$zipName
@@ -24,7 +24,7 @@ jobs:
           Expand-Archive $zipName -DestinationPath "staging"
           echo "About to dir staging"
           dir staging
-          $folderName="AgileCloudManager-windows-1.1"
+          $folderName="AgileCloudManager-windows-1.2"
           $sourceFolderName="staging\\*"
           Copy-Item -Path $sourceFolderName -Recurse -Destination C:\\Users\\runneradmin\\acmhome\\ -Verbose
           echo "About to dir C:\\Users\\runneradmin\\acmhome\\"
