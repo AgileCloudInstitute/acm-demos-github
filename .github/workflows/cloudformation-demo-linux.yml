@@ -11,7 +11,7 @@ jobs:
       - shell: bash
         name: Download and extract Release
         run: |
-          nameOfRelease="AgileCloudManager-linux-1.1"
+          nameOfRelease="AgileCloudManager-linux-1.2"
           echo "About to print name of release"
           echo $nameOfRelease 
           echo "About to create release"
