@@ -11,7 +11,7 @@ jobs:
       - shell: pwsh
         name: Download and extract Release
         run: |
-          $vers="windows-1.1"
+          $vers="windows-1.2"
           $zipName="AgileCloudManager-"+$vers+".zip"
           echo "About to dir initially"
           dir
